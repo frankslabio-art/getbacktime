@@ -1,0 +1,4 @@
+# Never commit real secrets
+frank-hermes/.env
+frank-hermes/*.pem
+frank-hermes/*.key
