@@ -176,11 +176,13 @@ export default function ContactPage() {
                     </div>
                     <h3 style={{ fontFamily: 'var(--font-newsreader)', fontSize: '1.375rem', color: 'var(--gbt-ink)', marginBottom: '0.625rem' }}>Request received.</h3>
                     <p style={{ fontFamily: 'var(--font-hanken)', color: 'var(--gbt-ink-muted)', lineHeight: 1.65, fontSize: '0.9375rem' }}>
-                      We'll be in touch soon to schedule your assessment call.
+                      Thanks — your request is in. We’ll review what you shared and reply as soon as possible.
                     </p>
                   </div>
                 ) : (
                   <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
+                    <input type="hidden" name="_subject" value="New GetBackTime assessment request" />
+                    <input type="hidden" name="source" value="getbacktime.org/contact" />
                     <div className="contact-form-row" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
                       <div>
                         <label style={labelStyle}>First name</label>
@@ -199,6 +201,13 @@ export default function ContactPage() {
                     <div>
                       <label style={labelStyle}>Business email</label>
                       <input required type="email" name="email" style={inputStyle}
+                        onFocus={e => e.target.style.borderColor = 'var(--gbt-brand-amber)'}
+                        onBlur={e => e.target.style.borderColor = 'var(--gbt-hairline)'} />
+                    </div>
+
+                    <div>
+                      <label style={labelStyle}>Phone <span style={{ color: 'var(--gbt-ink-muted)', fontWeight: 400 }}>(optional)</span></label>
+                      <input type="tel" name="phone" style={inputStyle}
                         onFocus={e => e.target.style.borderColor = 'var(--gbt-brand-amber)'}
                         onBlur={e => e.target.style.borderColor = 'var(--gbt-hairline)'} />
                     </div>
@@ -267,8 +276,8 @@ export default function ContactPage() {
                       </p>
                     </div>
 
-                    <p style={{ fontFamily: 'var(--font-hanken)', fontSize: '0.8125rem', color: 'var(--gbt-ink-muted)' }}>
-                      No spam. No hard sells. Just a real conversation about your business.
+                    <p style={{ fontFamily: 'var(--font-hanken)', fontSize: '0.8125rem', color: 'var(--gbt-ink-muted)', lineHeight: 1.55 }}>
+                      No spam. No hard sells. By submitting, you agree to be contacted about your GetBackTime assessment request.
                     </p>
                   </form>
                 )}
