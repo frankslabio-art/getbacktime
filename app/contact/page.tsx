@@ -1,5 +1,6 @@
 'use client'
 import { useState } from 'react'
+import { useForm } from '@formspree/react'
 import Nav from '@/components/Nav'
 import Footer from '@/components/Footer'
 import { ArrowRight, Check, X, Mail, Clock, ShieldCheck } from 'lucide-react'
@@ -82,40 +83,8 @@ const faqs = [
 const CAL_LINK = 'https://cal.com/franks-lab-ipmtbk/getbacktime-assessment'
 
 export default function ContactPage() {
-  const [form, setForm] = useState({
-    firstName: '', lastName: '', email: '', business: '',
-    industry: '', teamSize: '', challenge: '',
-  })
-  const [submitted, setSubmitted] = useState(false)
-  const [submitting, setSubmitting] = useState(false)
+  const [state, handleSubmit] = useForm('xqeozvad')
   const [openFaq, setOpenFaq] = useState<number | null>(null)
-
-  const set = (k: keyof typeof form) =>
-    (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) =>
-      setForm(prev => ({ ...prev, [k]: e.target.value }))
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setSubmitting(true)
-    try {
-      await fetch('https://formspree.io/f/xqeozvad', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
-        body: JSON.stringify({
-          firstName: form.firstName,
-          lastName: form.lastName,
-          email: form.email,
-          business: form.business,
-          industry: form.industry,
-          teamSize: form.teamSize,
-          challenge: form.challenge,
-        }),
-      })
-    } finally {
-      setSubmitting(false)
-      setSubmitted(true)
-    }
-  }
 
   const inputStyle: React.CSSProperties = {
     width: '100%',
@@ -200,17 +169,14 @@ export default function ContactPage() {
                   If this saves just 2 hours a week, you'll earn it back in the first month.
                 </p>
 
-                {submitted ? (
+                {state.succeeded ? (
                   <div style={{ padding: '2.5rem', borderRadius: 12, background: 'rgba(94,124,110,0.08)', border: '1px solid rgba(94,124,110,0.3)', textAlign: 'center' }}>
                     <div style={{ width: 48, height: 48, borderRadius: '50%', background: 'rgba(94,124,110,0.15)', border: '1px solid rgba(94,124,110,0.3)', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 1.25rem' }}>
                       <Check size={22} color="var(--gbt-sage)" strokeWidth={2} />
                     </div>
                     <h3 style={{ fontFamily: 'var(--font-newsreader)', fontSize: '1.375rem', color: 'var(--gbt-ink)', marginBottom: '0.625rem' }}>Request received.</h3>
-                    <p style={{ fontFamily: 'var(--font-hanken)', color: 'var(--gbt-ink-muted)', lineHeight: 1.65, fontSize: '0.9375rem', marginBottom: '1.25rem' }}>
-                      A booking tab should have opened. If not,{' '}
-                      <a href={CAL_LINK} target="_blank" rel="noopener noreferrer" style={{ color: 'var(--gbt-brand-amber)', textDecoration: 'underline' }}>
-                        click here to book your assessment
-                      </a>.
+                    <p style={{ fontFamily: 'var(--font-hanken)', color: 'var(--gbt-ink-muted)', lineHeight: 1.65, fontSize: '0.9375rem' }}>
+                      We'll be in touch soon to schedule your assessment call.
                     </p>
                   </div>
                 ) : (
@@ -218,13 +184,13 @@ export default function ContactPage() {
                     <div className="contact-form-row" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
                       <div>
                         <label style={labelStyle}>First name</label>
-                        <input required style={inputStyle} value={form.firstName} onChange={set('firstName')}
+                        <input required name="firstName" style={inputStyle}
                           onFocus={e => e.target.style.borderColor = 'var(--gbt-brand-amber)'}
                           onBlur={e => e.target.style.borderColor = 'var(--gbt-hairline)'} />
                       </div>
                       <div>
                         <label style={labelStyle}>Last name</label>
-                        <input required style={inputStyle} value={form.lastName} onChange={set('lastName')}
+                        <input required name="lastName" style={inputStyle}
                           onFocus={e => e.target.style.borderColor = 'var(--gbt-brand-amber)'}
                           onBlur={e => e.target.style.borderColor = 'var(--gbt-hairline)'} />
                       </div>
@@ -232,14 +198,14 @@ export default function ContactPage() {
 
                     <div>
                       <label style={labelStyle}>Business email</label>
-                      <input required type="email" style={inputStyle} value={form.email} onChange={set('email')}
+                      <input required type="email" name="email" style={inputStyle}
                         onFocus={e => e.target.style.borderColor = 'var(--gbt-brand-amber)'}
                         onBlur={e => e.target.style.borderColor = 'var(--gbt-hairline)'} />
                     </div>
 
                     <div>
                       <label style={labelStyle}>Business name</label>
-                      <input required style={inputStyle} value={form.business} onChange={set('business')}
+                      <input required name="business" style={inputStyle}
                         onFocus={e => e.target.style.borderColor = 'var(--gbt-brand-amber)'}
                         onBlur={e => e.target.style.borderColor = 'var(--gbt-hairline)'} />
                     </div>
@@ -247,7 +213,7 @@ export default function ContactPage() {
                     <div className="contact-form-row" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
                       <div>
                         <label style={labelStyle}>Industry</label>
-                        <select required style={{ ...inputStyle, appearance: 'none', cursor: 'pointer' }} value={form.industry} onChange={set('industry')}
+                        <select required name="industry" style={{ ...inputStyle, appearance: 'none', cursor: 'pointer' }}
                           onFocus={e => e.target.style.borderColor = 'var(--gbt-brand-amber)'}
                           onBlur={e => e.target.style.borderColor = 'var(--gbt-hairline)'}>
                           <option value="">Select…</option>
@@ -256,7 +222,7 @@ export default function ContactPage() {
                       </div>
                       <div>
                         <label style={labelStyle}>Team size</label>
-                        <select required style={{ ...inputStyle, appearance: 'none', cursor: 'pointer' }} value={form.teamSize} onChange={set('teamSize')}
+                        <select required name="teamSize" style={{ ...inputStyle, appearance: 'none', cursor: 'pointer' }}
                           onFocus={e => e.target.style.borderColor = 'var(--gbt-brand-amber)'}
                           onBlur={e => e.target.style.borderColor = 'var(--gbt-hairline)'}>
                           <option value="">Select…</option>
@@ -267,15 +233,13 @@ export default function ContactPage() {
 
                     <div>
                       <label style={labelStyle}>What's your biggest operational challenge right now?</label>
-                      <textarea required rows={4}
+                      <textarea required name="challenge" rows={4}
                         style={{ ...inputStyle, resize: 'vertical', lineHeight: 1.6 }}
-                        value={form.challenge} onChange={set('challenge')}
                         onFocus={e => e.target.style.borderColor = 'var(--gbt-brand-amber)'}
                         onBlur={e => e.target.style.borderColor = 'var(--gbt-hairline)'}
                       />
                     </div>
 
-                    {/* Big submit button */}
                     <button
                       type="submit"
                       className="gbt-btn gbt-btn-primary"
@@ -285,18 +249,17 @@ export default function ContactPage() {
                         fontSize: '1.0625rem',
                         fontWeight: 600,
                         padding: '1.0625rem 2rem',
-                        cursor: submitting ? 'not-allowed' : 'pointer',
-                        opacity: submitting ? 0.7 : 1,
+                        cursor: state.submitting ? 'not-allowed' : 'pointer',
+                        opacity: state.submitting ? 0.7 : 1,
                         border: 'none',
                         letterSpacing: '0.01em',
                       }}
-                      disabled={submitting}
+                      disabled={state.submitting}
                     >
-                      {submitting ? 'Sending…' : 'Request $497 Assessment'}
-                      {!submitting && <ArrowRight size={18} strokeWidth={2} />}
+                      {state.submitting ? 'Sending…' : 'Request $497 Assessment'}
+                      {!state.submitting && <ArrowRight size={18} strokeWidth={2} />}
                     </button>
 
-                    {/* Guarantee note */}
                     <div style={{ display: 'flex', alignItems: 'flex-start', gap: '0.625rem' }}>
                       <ShieldCheck size={15} color="var(--gbt-sage)" strokeWidth={1.75} style={{ flexShrink: 0, marginTop: '0.1rem' }} />
                       <p style={{ fontFamily: 'var(--font-hanken)', fontSize: '0.8rem', color: 'var(--gbt-ink-muted)', lineHeight: 1.55 }}>
