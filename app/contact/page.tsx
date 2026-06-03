@@ -1,6 +1,5 @@
 'use client'
-import { useState } from 'react'
-import { useForm } from '@formspree/react'
+import { FormEvent, useState } from 'react'
 import Nav from '@/components/Nav'
 import Footer from '@/components/Footer'
 import { ArrowRight, Check, X, Mail, Clock, ShieldCheck } from 'lucide-react'
@@ -81,10 +80,51 @@ const faqs = [
 
 // ── Replace with your actual cal.com booking link ──
 const CAL_LINK = 'https://cal.com/franks-lab-ipmtbk/getbacktime-assessment'
+const MAKE_WEBHOOK_URL = 'https://hook.us2.make.com/butpqcopm91eswu1tylajx56oi9ows8o'
+
+type SubmissionState = {
+  submitting: boolean
+  succeeded: boolean
+  error: string | null
+}
 
 export default function ContactPage() {
-  const [state, handleSubmit] = useForm('xqeozvad')
+  const [state, setState] = useState<SubmissionState>({ submitting: false, succeeded: false, error: null })
   const [openFaq, setOpenFaq] = useState<number | null>(null)
+
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault()
+    setState({ submitting: true, succeeded: false, error: null })
+
+    const form = event.currentTarget
+    const formData = new FormData(form)
+    const payload = Object.fromEntries(formData.entries())
+
+    try {
+      const response = await fetch(MAKE_WEBHOOK_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          ...payload,
+          submittedAt: new Date().toISOString(),
+          source: payload.source || 'getbacktime.org/contact',
+        }),
+      })
+
+      if (!response.ok) {
+        throw new Error(`Make webhook returned ${response.status}`)
+      }
+
+      form.reset()
+      setState({ submitting: false, succeeded: true, error: null })
+    } catch (error) {
+      setState({
+        submitting: false,
+        succeeded: false,
+        error: error instanceof Error ? error.message : 'Something went wrong. Please try again.',
+      })
+    }
+  }
 
   const inputStyle: React.CSSProperties = {
     width: '100%',
@@ -183,6 +223,13 @@ export default function ContactPage() {
                   <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
                     <input type="hidden" name="_subject" value="New GetBackTime assessment request" />
                     <input type="hidden" name="source" value="getbacktime.org/contact" />
+
+                    {state.error && (
+                      <div style={{ padding: '1rem', borderRadius: 8, background: 'rgba(190,69,69,0.08)', border: '1px solid rgba(190,69,69,0.25)', color: '#8a2f2f', fontFamily: 'var(--font-hanken)', fontSize: '0.875rem', lineHeight: 1.5 }}>
+                        We couldn’t send your request automatically. Please email hello@getbacktime.co or try again in a minute.
+                      </div>
+                    )}
+
                     <div className="contact-form-row" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
                       <div>
                         <label style={labelStyle}>First name</label>
