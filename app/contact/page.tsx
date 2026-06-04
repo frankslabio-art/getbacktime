@@ -105,6 +105,12 @@ export default function ContactPage() {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
+          // Temporary Make compatibility shim:
+          // The current Make HTTP module has manually typed tokens like
+          // {{Webhook}}{{firstName}} instead of {{1.firstName}}. Including
+          // this empty field lets those expressions resolve to the submitted
+          // values without breaking the live demo while Make is patched later.
+          Webhook: '',
           ...payload,
           submittedAt: new Date().toISOString(),
           source: payload.source || 'getbacktime.org/contact',
