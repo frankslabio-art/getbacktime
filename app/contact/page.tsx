@@ -82,6 +82,16 @@ const faqs = [
 const CAL_LINK = 'https://cal.com/franks-lab-ipmtbk/getbacktime-assessment'
 const MAKE_WEBHOOK_URL = 'https://hook.us2.make.com/butpqcopm91eswu1tylajx56oi9ows8o'
 
+const sanitizeForMakeHttpJson = (value: FormDataEntryValue) => {
+  if (typeof value !== 'string') return value
+
+  return value
+    .replace(/[\u0000-\u001F\u007F]/g, ' ')
+    .replace(/["\\]/g, (match) => (match === '"' ? "'" : '/'))
+    .replace(/\s+/g, ' ')
+    .trim()
+}
+
 type SubmissionState = {
   submitting: boolean
   succeeded: boolean
@@ -98,7 +108,10 @@ export default function ContactPage() {
 
     const form = event.currentTarget
     const formData = new FormData(form)
-    const payload = Object.fromEntries(formData.entries())
+    const rawPayload = Object.fromEntries(formData.entries())
+    const payload = Object.fromEntries(
+      Object.entries(rawPayload).map(([key, value]) => [key, sanitizeForMakeHttpJson(value)])
+    )
 
     try {
       const response = await fetch(MAKE_WEBHOOK_URL, {
