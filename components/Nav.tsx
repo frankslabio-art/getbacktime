@@ -8,9 +8,9 @@ import { Clock3, Menu, X } from 'lucide-react'
 gsap.registerPlugin(ScrollTrigger, useGSAP)
 
 const navLinks = [
-  { label: 'How it works', href: '#how-it-works' },
-  { label: 'What we audit', href: '#audit' },
-  { label: 'About', href: '#about' },
+  { label: 'How it works', href: '/#how-it-works' },
+  { label: 'What we audit', href: '/#audit' },
+  { label: 'About', href: '/#about' },
 ]
 
 export default function Nav() {
@@ -31,20 +31,38 @@ export default function Nav() {
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 60)
     window.addEventListener('scroll', onScroll, { passive: true })
+    onScroll()
     return () => window.removeEventListener('scroll', onScroll)
   }, [])
 
+  useEffect(() => {
+    document.body.style.overflow = open ? 'hidden' : ''
+    return () => { document.body.style.overflow = '' }
+  }, [open])
+
   const handleAnchor = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
-    e.preventDefault()
+    const hash = href.includes('#') ? `#${href.split('#')[1]}` : ''
+
+    // On the homepage, keep the smooth in-page scroll. From /contact or any
+    // other page, let the browser navigate back to the homepage section.
+    if (hash && window.location.pathname === '/') {
+      e.preventDefault()
+      setOpen(false)
+      document.querySelector(hash)?.scrollIntoView({ behavior: 'smooth' })
+      return
+    }
+
     setOpen(false)
-    const el = document.querySelector(href)
-    el?.scrollIntoView({ behavior: 'smooth' })
   }
+
+  const navTextColor = scrolled ? 'var(--gbt-ink)' : '#fff'
+  const navMutedColor = scrolled ? 'var(--gbt-ink-muted)' : 'rgba(255,255,255,0.74)'
 
   return (
     <>
       <nav
         ref={navRef}
+        aria-label="Primary navigation"
         style={{
           position: 'fixed',
           top: 0,
@@ -52,51 +70,39 @@ export default function Nav() {
           right: 0,
           zIndex: 100,
           transition: 'background-color 300ms ease, backdrop-filter 300ms ease, border-color 300ms ease',
-          backgroundColor: scrolled ? 'rgba(251, 247, 238, 0.88)' : 'transparent',
-          backdropFilter: scrolled ? 'blur(12px)' : 'none',
-          borderBottom: scrolled ? '1px solid rgba(232, 223, 210, 0.8)' : '1px solid transparent',
+          backgroundColor: scrolled || open ? 'rgba(251, 247, 238, 0.92)' : 'transparent',
+          backdropFilter: scrolled || open ? 'blur(12px)' : 'none',
+          borderBottom: scrolled || open ? '1px solid rgba(232, 223, 210, 0.8)' : '1px solid transparent',
         }}
       >
-        <div className="gbt-container" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', height: 64 }}>
-          {/* Logo */}
-          <a href="/" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', textDecoration: 'none' }}>
-            <div style={{
-              width: 32, height: 32,
-              borderRadius: '50%',
-              background: 'var(--gbt-brand-amber)',
-              display: 'flex', alignItems: 'center', justifyContent: 'center',
-            }}>
+        <div className="gbt-container gbt-nav-inner">
+          <a href="/" className="gbt-nav-logo" aria-label="GetBackTime home">
+            <div className="gbt-nav-mark">
               <Clock3 size={16} color="#fff" strokeWidth={1.75} />
             </div>
-            <span style={{ fontFamily: 'var(--font-newsreader)', fontSize: '1.125rem', fontWeight: 400, color: scrolled ? 'var(--gbt-ink)' : '#fff', letterSpacing: '-0.01em', transition: 'color 300ms ease' }}>
+            <span
+              className="gbt-nav-wordmark"
+              style={{ color: scrolled || open ? 'var(--gbt-ink)' : '#fff' }}
+            >
               GetBackTime
             </span>
           </a>
 
-          {/* Desktop links */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: '2rem' }} className="hidden md:flex">
+          <div className="gbt-nav-links">
             {navLinks.map((l) => (
               <a
                 key={l.href}
                 href={l.href}
                 onClick={(e) => handleAnchor(e, l.href)}
-                style={{
-                  fontFamily: 'var(--font-hanken)',
-                  fontSize: '0.9rem',
-                  fontWeight: 500,
-                  color: scrolled ? 'var(--gbt-ink-muted)' : 'rgba(255,255,255,0.7)',
-                  textDecoration: 'none',
-                  transition: 'color 180ms ease',
-                }}
-                onMouseEnter={e => (e.currentTarget.style.color = scrolled ? 'var(--gbt-ink)' : '#fff')}
-                onMouseLeave={e => (e.currentTarget.style.color = scrolled ? 'var(--gbt-ink-muted)' : 'rgba(255,255,255,0.7)')}
+                style={{ color: navMutedColor }}
+                onMouseEnter={e => (e.currentTarget.style.color = navTextColor)}
+                onMouseLeave={e => (e.currentTarget.style.color = navMutedColor)}
               >
                 {l.label}
               </a>
             ))}
             <a
               href="/contact"
-              onClick={undefined}
               className="gbt-btn gbt-btn-primary"
               style={{ padding: '0.5rem 1.25rem', fontSize: '0.875rem' }}
             >
@@ -104,33 +110,26 @@ export default function Nav() {
             </a>
           </div>
 
-          {/* Mobile menu button */}
           <button
-            className="md:hidden"
+            className="gbt-nav-menu-button"
+            type="button"
+            aria-label={open ? 'Close navigation menu' : 'Open navigation menu'}
+            aria-expanded={open}
             onClick={() => setOpen(!open)}
-            style={{ background: 'none', border: 'none', cursor: 'pointer', color: scrolled ? 'var(--gbt-ink)' : '#fff', padding: '0.25rem' }}
+            style={{ color: scrolled || open ? 'var(--gbt-ink)' : '#fff' }}
           >
             {open ? <X size={22} /> : <Menu size={22} />}
           </button>
         </div>
       </nav>
 
-      {/* Mobile menu */}
       {open && (
-        <div style={{
-          position: 'fixed', top: 64, left: 0, right: 0, zIndex: 99,
-          background: 'rgba(251,247,238,0.98)',
-          backdropFilter: 'blur(12px)',
-          borderBottom: '1px solid var(--gbt-hairline)',
-          padding: '1.5rem 2rem',
-          display: 'flex', flexDirection: 'column', gap: '1.25rem',
-        }}>
+        <div className="gbt-mobile-menu">
           {navLinks.map((l) => (
             <a
               key={l.href}
               href={l.href}
               onClick={(e) => handleAnchor(e, l.href)}
-              style={{ fontFamily: 'var(--font-hanken)', fontWeight: 500, color: 'var(--gbt-ink)', textDecoration: 'none', fontSize: '1rem' }}
             >
               {l.label}
             </a>
@@ -138,7 +137,8 @@ export default function Nav() {
           <a
             href="/contact"
             className="gbt-btn gbt-btn-primary"
-            style={{ textAlign: 'center' }}
+            onClick={() => setOpen(false)}
+            style={{ width: '100%', justifyContent: 'center' }}
           >
             Book Assessment
           </a>
