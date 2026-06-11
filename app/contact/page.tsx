@@ -331,7 +331,7 @@ export default function ContactPage() {
                       }}
                       disabled={state.submitting}
                     >
-                      {state.submitting ? 'Sending…' : 'Request $497 Assessment'}
+                      {state.submitting ? 'Sending…' : 'Request Assessment'}
                       {!state.submitting && <ArrowRight size={18} strokeWidth={2} />}
                     </button>
 

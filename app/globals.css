@@ -468,6 +468,64 @@ body {
 
   /* About founder grid stacks */
   .founder-grid { grid-template-columns: 1fr !important; }
+
+  /* About section mobile readability */
+  .about-two-col {
+    grid-template-columns: 1fr !important;
+    gap: 2.5rem !important;
+  }
+
+  .about-left,
+  .about-pillars,
+  .about-clients,
+  .founder-grid,
+  .founder-grid > div {
+    min-width: 0;
+  }
+
+  .about-left .gbt-h2 {
+    font-size: clamp(2rem, 11vw, 2.75rem) !important;
+    line-height: 1.05 !important;
+    letter-spacing: -0.02em;
+  }
+
+  .about-left p,
+  .about-pillar p,
+  .founder-grid p {
+    overflow-wrap: normal;
+    word-break: normal;
+    hyphens: none;
+  }
+
+  .about-left p {
+    font-size: 0.95rem !important;
+    line-height: 1.6 !important;
+  }
+
+  .about-pillar p {
+    line-height: 1.55 !important;
+  }
+
+  .about-pillar {
+    padding: 1.125rem !important;
+  }
+
+  .about-pillars {
+    gap: 1rem !important;
+  }
+
+  .about-clients {
+    margin-top: 3.25rem !important;
+    padding-top: 2.25rem !important;
+  }
+
+  .founder-grid {
+    gap: 1.25rem !important;
+  }
+
+  .founder-grid img {
+    display: block;
+  }
 }
 
 /* ─── Noise overlay ───────────────────────────── */
