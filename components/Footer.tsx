@@ -91,7 +91,7 @@ export default function Footer() {
             </p>
             <div style={{ display: 'flex', gap: '0.75rem' }}>
               <a
-                href="mailto:hello@getbacktime.co"
+                href="mailto:frankslab.io@gmail.com"
                 style={{ width: 34, height: 34, borderRadius: '50%', background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', textDecoration: 'none', transition: 'background 180ms ease' }}
                 onMouseEnter={e => (e.currentTarget.style.background = 'rgba(255,255,255,0.12)')}
                 onMouseLeave={e => (e.currentTarget.style.background = 'rgba(255,255,255,0.06)')}

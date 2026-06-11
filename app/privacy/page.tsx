@@ -60,14 +60,14 @@ export default function PrivacyPage() {
 
             <h2 style={h2Style}>Your rights</h2>
             <p style={prose}>
-              You have the right to access, correct, or request deletion of your personal data at any time. To exercise these rights, contact us at hello@getbacktime.co.
+              You have the right to access, correct, or request deletion of your personal data at any time. To exercise these rights, contact us at frankslab.io@gmail.com.
             </p>
 
             <h2 style={h2Style}>Contact</h2>
             <p style={prose}>
               Questions about this policy? Email us at{' '}
-              <a href="mailto:hello@getbacktime.co" style={{ color: 'var(--gbt-brand-amber)', textDecoration: 'none' }}>
-                hello@getbacktime.co
+              <a href="mailto:frankslab.io@gmail.com" style={{ color: 'var(--gbt-brand-amber)', textDecoration: 'none' }}>
+                frankslab.io@gmail.com
               </a>.
             </p>
           </div>

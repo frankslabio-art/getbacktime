@@ -109,7 +109,7 @@ export default function BottomCTA() {
             <ArrowRight size={17} strokeWidth={2} />
           </a>
           <a
-            href="mailto:hello@getbacktime.co"
+            href="mailto:frankslab.io@gmail.com"
             className="bcta-btn gbt-btn gbt-btn-ghost-dark"
             style={{ fontSize: '1.0625rem', padding: '1rem 1.75rem' }}
           >

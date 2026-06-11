@@ -245,7 +245,7 @@ export default function ContactPage() {
 
                     {state.error && (
                       <div style={{ padding: '1rem', borderRadius: 8, background: 'rgba(190,69,69,0.08)', border: '1px solid rgba(190,69,69,0.25)', color: '#8a2f2f', fontFamily: 'var(--font-hanken)', fontSize: '0.875rem', lineHeight: 1.5 }}>
-                        We couldn’t send your request automatically. Please email hello@getbacktime.co or try again in a minute.
+                        We couldn’t send your request automatically. Please email frankslab.io@gmail.com or try again in a minute.
                       </div>
                     )}
 
@@ -391,8 +391,8 @@ export default function ContactPage() {
                 <div style={{ padding: '1.5rem', borderRadius: 12, background: '#fff', border: '1px solid var(--gbt-hairline)', display: 'flex', flexDirection: 'column', gap: '0.875rem' }}>
                   <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'center' }}>
                     <Mail size={15} color="var(--gbt-brand-amber)" strokeWidth={1.75} />
-                    <a href="mailto:hello@getbacktime.co" style={{ fontFamily: 'var(--font-hanken)', fontSize: '0.875rem', color: 'var(--gbt-ink-muted)', textDecoration: 'none' }}>
-                      hello@getbacktime.co
+                    <a href="mailto:frankslab.io@gmail.com" style={{ fontFamily: 'var(--font-hanken)', fontSize: '0.875rem', color: 'var(--gbt-ink-muted)', textDecoration: 'none' }}>
+                      frankslab.io@gmail.com
                     </a>
                   </div>
                   <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'center' }}>

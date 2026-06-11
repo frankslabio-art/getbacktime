@@ -76,8 +76,8 @@ export default function TermsPage() {
             <h2 style={h2Style}>Contact</h2>
             <p style={prose}>
               Questions? Email us at{' '}
-              <a href="mailto:hello@getbacktime.co" style={{ color: 'var(--gbt-brand-amber)', textDecoration: 'none' }}>
-                hello@getbacktime.co
+              <a href="mailto:frankslab.io@gmail.com" style={{ color: 'var(--gbt-brand-amber)', textDecoration: 'none' }}>
+                frankslab.io@gmail.com
               </a>.
             </p>
           </div>
